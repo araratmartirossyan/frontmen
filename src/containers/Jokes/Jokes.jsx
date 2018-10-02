@@ -56,11 +56,15 @@ export default class Jokes extends Component {
 Jokes.propTypes = {
   jokesList: array,
   favorites: array,
-  markFavoriteJoke: func
+  markFavoriteJoke: func,
+  fetchJokes: func,
+  fetchFavorites: func
 }
 
 Jokes.defaultProps = {
   jokesList: [],
   favorites: [],
-  markFavoriteJoke: () => {}
+  markFavoriteJoke: () => {},
+  fetchJokes: () => {},
+  fetchFavorites: () => {}
 }

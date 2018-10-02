@@ -24,12 +24,10 @@ export default class List extends Component {
 
 List.propTypes = {
   list: array,
-  favorites: array,
   action: func
 }
 
 List.defaultProps = {
   list: [],
-  favorites: [],
   action: () => {}
 } 

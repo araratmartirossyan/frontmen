@@ -74,9 +74,14 @@ const handleMarkFavoriteFailure = (state, error) =>
     error
   })
 
-export const generateFavoriteJoke = count => (dispatch, getState) =>
+export const generateFavoriteJoke = count => dispatch =>
   generateFavorite(count)
-    .then(({ data }) => dispatch(generateFavoriteSuccess(data)))
+    .then(data => dispatch(
+      generateFavoriteSuccess(
+        propOr({}, 'data', data)
+      )
+    )
+  )
 
 const handleGenerateFavoriteSuccess = (state, { data: { count, data } }) => {
   const favs = state.favorites

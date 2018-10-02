@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { object, string, func, bool } from 'prop-types'
+import { object, string, func } from 'prop-types'
 import Button from '../Button'
 import './ListItem.css'
 
@@ -41,15 +41,13 @@ export default class List extends Component {
 }
 
 List.propTypes = {
-  isFavorite: bool,
   item: object,
   title: string,
   action: func
 }
 
 List.defaultProps = {
-  isFavorite: false,
-  object: {},
+  item: {},
   title: '',
   action: () => {}
 } 
