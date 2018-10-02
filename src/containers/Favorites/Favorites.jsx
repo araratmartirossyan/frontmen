@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { array } from 'prop-types'
+import { array, func, number, object } from 'prop-types'
 import connect from 'redux-connect-decorator'
 import List from '../../components/List'
 import Button from '../../components/Button'
@@ -9,7 +9,7 @@ import { markFavoriteJoke, fetchFavorites, generateFavoriteJoke } from '../../st
 import './Favorites.css'
 
 const LOADER_TITLE = 'Sorry. But you did not add any jokes to your favorite list!'
-const STATUS_REQUEST_INTERVAL = 5 * 1000
+const STATUS_REQUEST_INTERVAL = 2 * 1000
 
 @connect(
   ({ favorite: { favorites, pages, meta } }) => ({ favorites, pages, meta }),
@@ -27,6 +27,10 @@ export default class Favorites extends Component {
     this.tm = null
   }
 
+  state = {
+    isCounting: false
+  }
+
   componentWillMount() {
     this.props.fetchFavorites({
       page: 1,
@@ -35,13 +39,16 @@ export default class Favorites extends Component {
   }
 
   componentWillReceiveProps() {
-    if (this.props.favorites.length >= 10) {
-      clearInterval(this.tm)
+    if (this.props.favorites.length >= 9) {
+      this.handleKillCounter()
+      this.setState({ 
+        isCounting: false
+      })
     }
   }
 
   componentWillUnmount() {
-    clearInterval(this.tm)
+    this.handleKillCounter()
   }
 
   handleNextPage = () => {
@@ -56,13 +63,23 @@ export default class Favorites extends Component {
     fetchFavorites({ page: currentPage, limit })
   }
 
+  handleKillCounter = () => {
+    clearInterval(this.tm)
+    this.setState({
+      isCounting: !this.state.isCounting
+    })
+  }
+
   handleStartCount = () => {
     const { favorites, generateFavoriteJoke } = this.props
     if (favorites.length >= 10) {
-      clearInterval(this.tm)
+      this.handleKillCounter()
     } else {
+      this.setState({
+        isCounting: !this.state.isCounting
+      })
       this.tm = setInterval(() =>
-        generateFavoriteJoke(),
+        generateFavoriteJoke(1),
         STATUS_REQUEST_INTERVAL
       )
     }
@@ -81,20 +98,26 @@ export default class Favorites extends Component {
       pages,
       meta: { page }
     } = this.props
+    const { isCounting } = this.state
     const hasMore = page < pages
     const showPreviousButton = page > 1
+    const cantCount = favorites.length >= 10
+    const counterProps = isCounting ?
+      { title: 'Stop count', func: this.handleKillCounter } :
+      { title: 'Start count', func: this.handleStartCount }
+
     if (favorites.length === 0) {
-      return (<Loader title={LOADER_TITLE} />)
+      return (
+        <div className='favorites'>
+          {!cantCount && this.renderButton({ ...counterProps })}
+          <Loader title={LOADER_TITLE} />
+        </div>
+      )
     }
 
     return (
       <div className='favorites'>
-        {
-          this.renderButton({
-            title: 'Start count',
-            func: this.handleStartCount
-          })
-        }
+        {!cantCount && this.renderButton({ ...counterProps })}
         <List
           list={favorites}
           favorites={favorites}
@@ -118,9 +141,19 @@ export default class Favorites extends Component {
 }
 
 Favorites.propTypes = {
-  favorites: array
+  favorites: array,
+  meta: object,
+  pages: number,
+  markFavoriteJoke: func,
+  fetchFavorites: func,
+  generateFavoriteJoke: func
 }
 
 Favorites.defaultProps = {
-  favorites: []
+  favorites: [],
+  meta: {},
+  pages: 0,
+  markFavoriteJoke: () => {},
+  fetchFavorites: () => {},
+  generateFavoriteJoke: () => {}
 }

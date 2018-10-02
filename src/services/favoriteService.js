@@ -15,6 +15,6 @@ export const markFavoriteJokeRequest = params =>
 
 export const generateFavorite = count =>
   clientApi(
-    'post',
+    'get',
     `http://localhost:3000/api/v1/jokes/generateFavorite/?count=${count}`,
   )
