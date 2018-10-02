@@ -1,15 +1,17 @@
 import React, { Component } from 'react'
-import Wrapper from '../../components/Wrapper'
-import List from '../../components/List'
-import connect from 'redux-connect-decorator'
 import { array } from 'prop-types'
-import { fetchJokes } from '../../stores/modules/jokes'
+import connect from 'redux-connect-decorator'
+import List from '../../components/List'
+import { markFavoriteJoke, fetchFavorites } from '../../stores/modules/favorite'
 
 import './Favorites.css'
 
+const CHUCK_AVATAR = 'https://res.cloudinary.com/jerrick/image/upload/f_auto,fl_progressive,q_auto,c_fit,w_1100/wvanipvk1xocft2jsthp'
+
 @connect(
-  ({ jokes: { favorites } }) => ({ favorites }),
+  ({ favorite: { favorites } }) => ({ favorites }),
   {
+    markFavoriteJoke,
     fetchFavorites
   }
 )
@@ -20,13 +22,25 @@ export default class Favorites extends Component {
   }
 
   render() {
-    const { favorites } = this.props
-
+    const { favorites, markFavoriteJoke } = this.props
+    if (favorites.length === 0) {
+      return (
+        <div className='favorites'>
+          <h2>Sorry. But you did not add any jokes to your favorite list! </h2>
+          <img
+            src={CHUCK_AVATAR}
+            className='favorites_avatar'
+          />
+        </div>
+      )
+    }
     return (
-      <div className='jokes'>
-        <Wrapper>
-          <List list={favorites}/>
-        </Wrapper>
+      <div className='favorites'>
+        <List
+          list={favorites}
+          favorites={favorites}
+          action={markFavoriteJoke}
+        />
       </div>
     )
   }
@@ -37,5 +51,5 @@ Favorites.propTypes = {
 }
 
 Favorites.defaultProps = {
-  favorites: () => []
+  favorites: []
 }

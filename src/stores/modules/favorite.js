@@ -1,28 +1,29 @@
 import { createAction, createReducer } from 'redux-act'
-import { fetchJokesRequest, markFavoriteJokeRequest } from '../../services/jokesService'
+import { fetchFavoritesRequest, markFavoriteJokeRequest } from '../../services/favoriteService'
 
 const initialState = {
-  jokes: []
+  favorites: []
 }
 
 const fetchFavoritesSuccess = createAction('frontmen/favorite/FETCH_FAVORITE_SUCCESS')
 const fetchFavoritesFailure = createAction('frontmen/favorite/FETCH_FAVORITE_FAILURE')
-const markFavoriteSuccess = createAction('frontmen/jokes/MARK_FAVORITE_SUCCESS')
-const markFavoriteFailure = createAction('frontmen/jokes/MARK_FAVORITE_FAILURE')
+const markFavoriteSuccess = createAction('frontmen/favorite/MARK_FAVORITE_SUCCESS')
+const markFavoriteFailure = createAction('frontmen/favorite/MARK_FAVORITE_FAILURE')
 
-export const fetchJokes = () => dispatch =>
-  fetchJokesRequest()
-    .then(({ data: { value } }) =>
-      dispatch(fetchJokesSuccess(value))
-    )
 
-const handleFetchJokesSuccess = (state, jokesList) =>
+export const fetchFavorites = () => dispatch =>
+  fetchFavoritesRequest()
+  .then(({ data }) =>
+    dispatch(fetchFavoritesSuccess(data))
+  )
+
+const handleFetchFavoritesSuccess = (state, { data }) =>
   ({
     ...state,
-    jokesList
+    favorites: data
   })
 
-const handleFetchJokesFailure = (state, error) =>
+const handleFetchFavoritesFailure = (state, error) =>
   ({
     ...state,
     isError: true,
@@ -31,18 +32,24 @@ const handleFetchJokesFailure = (state, error) =>
 
 export const markFavoriteJoke = params => dispatch =>
   markFavoriteJokeRequest(params)
-    .then(({ data: { success } }) => )
+    .then(() => {
+      dispatch(fetchFavorites())
+      dispatch(markFavoriteSuccess())
+    })
 
-const handleMarkFavoriteSuccess = (state, jokesList) =>
+const handleMarkFavoriteSuccess = (state) =>
   ({
     ...state,
-    jokesList
+    isLoading: false,
+    isLoaded: true
   })
-  
+ 
 const handleMarkFavoriteFailure = (state, error) =>
   ({
     ...state,
     isError: true,
+    isLoading: false,
+    isLoaded: true,
     error
   })
 
