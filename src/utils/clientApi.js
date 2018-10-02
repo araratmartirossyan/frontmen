@@ -1,10 +1,10 @@
 import axios from 'axios'
 
-export const clientApi = async (method, url) => {
+export const clientApi = async (method, url, params) => {
   try {
-    const request = await axios[method](url)
+    const request = await axios[method](url, params)
     return request
   } catch(err) {
-    throw new Error(err)
+    console.log(err)
   }
 }

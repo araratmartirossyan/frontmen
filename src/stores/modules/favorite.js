@@ -5,10 +5,10 @@ const initialState = {
   jokes: []
 }
 
-const fetchJokesSuccess = createAction('frontmen/jokes/FETCH_JOKES_SUCCESS')
-const fetchJokesFailure = createAction('frontmen/jokes/FETCH_JOKES_FAILURE')
-const markFavoriteSuccess = createAction('frontmen/jokes/FETCH_JOKES_SUCCESS')
-const markFavoriteFailure = createAction('frontmen/jokes/FETCH_JOKES_FAILURE')
+const fetchFavoritesSuccess = createAction('frontmen/favorite/FETCH_FAVORITE_SUCCESS')
+const fetchFavoritesFailure = createAction('frontmen/favorite/FETCH_FAVORITE_FAILURE')
+const markFavoriteSuccess = createAction('frontmen/jokes/MARK_FAVORITE_SUCCESS')
+const markFavoriteFailure = createAction('frontmen/jokes/MARK_FAVORITE_FAILURE')
 
 export const fetchJokes = () => dispatch =>
   fetchJokesRequest()
@@ -31,9 +31,7 @@ const handleFetchJokesFailure = (state, error) =>
 
 export const markFavoriteJoke = params => dispatch =>
   markFavoriteJokeRequest(params)
-    .then(data => {
-      console.log(data, 'important')
-    })
+    .then(({ data: { success } }) => )
 
 const handleMarkFavoriteSuccess = (state, jokesList) =>
   ({
@@ -49,8 +47,8 @@ const handleMarkFavoriteFailure = (state, error) =>
   })
 
 const reducer = createReducer(on => {
-  on(fetchJokesFailure, handleFetchJokesFailure)
-  on(fetchJokesSuccess, handleFetchJokesSuccess)
+  on(fetchFavoritesFailure, handleFetchFavoritesFailure)
+  on(fetchFavoritesSuccess, handleFetchFavoritesSuccess)
   on(markFavoriteSuccess, handleMarkFavoriteSuccess)
   on(markFavoriteFailure, handleMarkFavoriteFailure)
 }, initialState)

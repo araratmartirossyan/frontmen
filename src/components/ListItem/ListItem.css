@@ -1,0 +1,24 @@
+.listItem {
+    border-bottom: 1px solid #ddd;
+    padding: 25px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.listItem {
+    list-style-type: none;
+}
+
+.listItem:last-child {
+    border: none;
+}
+
+.listItem_title {
+    display: block;
+    line-height: 25px;
+    font-weight: 600;
+}
+
+.listItem_quote {
+    margin: 5px 0;
+}
