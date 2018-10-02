@@ -1,4 +1,5 @@
 import { createAction, createReducer } from 'redux-act'
+import { propOr } from 'ramda'
 import { fetchFavoritesRequest, markFavoriteJokeRequest } from '../../services/favoriteService'
 
 const initialState = {
@@ -17,8 +18,8 @@ const markFavoriteFailure = createAction('frontmen/favorite/MARK_FAVORITE_FAILUR
 
 export const fetchFavorites = ({ page, limit }) => dispatch =>
   fetchFavoritesRequest({ page, limit })
-    .then(({ data }) =>
-      dispatch(fetchFavoritesSuccess({ ...data, page, limit }))
+    .then(data =>
+      dispatch(fetchFavoritesSuccess({ ...propOr([], 'data', data), page, limit }))
     )
 
 const handleFetchFavoritesSuccess = (
@@ -28,7 +29,7 @@ const handleFetchFavoritesSuccess = (
       count,
       favorites = [],
       pages
-    },
+    } = {},
     page,
     limit
   }

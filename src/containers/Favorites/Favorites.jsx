@@ -8,7 +8,7 @@ import { markFavoriteJoke, fetchFavorites } from '../../stores/modules/favorite'
 
 import './Favorites.css'
 
-const LOADER_TITLE = '<h2>Sorry. But you did not add any jokes to your favorite list! </h2>'
+const LOADER_TITLE = 'Sorry. But you did not add any jokes to your favorite list!'
 
 @connect(
   ({ favorite: { favorites, pages, meta } }) => ({ favorites, pages, meta }),

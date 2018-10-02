@@ -1,5 +1,6 @@
 import { createAction, createReducer } from 'redux-act'
 import { fetchJokesRequest } from '../../services/jokesService'
+import { pathOr } from 'ramda'
 
 const initialState = {
   jokesList: []
@@ -10,8 +11,12 @@ const fetchJokesFailure = createAction('frontmen/jokes/FETCH_JOKES_FAILURE')
 
 export const fetchJokes = () => dispatch =>
   fetchJokesRequest()
-    .then(({ data: { value } }) =>
-      dispatch(fetchJokesSuccess(value))
+    .then(data =>
+      dispatch(
+        fetchJokesSuccess(
+          pathOr([], ['data', 'value'], data)
+        )
+      )
     )
 
 const handleFetchJokesSuccess = (state, jokesList = []) =>

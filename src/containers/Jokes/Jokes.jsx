@@ -38,7 +38,7 @@ export default class Jokes extends Component {
     const { jokesList, markFavoriteJoke, favorites } = this.props
     if (jokesList.length === 0) {
       return (
-        <div><Loader title={LOADER_TEXT} /></div>
+        <Loader title={LOADER_TEXT} />
       )
     }
     return (

@@ -7,7 +7,6 @@ import Favorites from '../Favorites'
 
 import './App.css'
 
-
 @connect(
   ({ favorite: { favCount } }) => ({ favCount }),
 )
