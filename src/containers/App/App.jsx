@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom'
+import { BrowserRouter as Router, Route, NavLink, Redirect } from 'react-router-dom'
 import connect from 'redux-connect-decorator'
 import Wrapper from '../../components/Wrapper'
 import Jokes from '../Jokes'
@@ -33,6 +33,7 @@ export default class App extends Component {
             </NavLink>
           </div>
           <Wrapper>
+            <Redirect from='/' to='/jokes' />
             <Route path='/jokes' component={Jokes} />
             <Route path='/favorites' component={Favorites} />
           </Wrapper>
