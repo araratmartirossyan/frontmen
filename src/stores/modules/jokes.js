@@ -2,7 +2,7 @@ import { createAction, createReducer } from 'redux-act'
 import { fetchJokesRequest } from '../../services/jokesService'
 
 const initialState = {
-  jokes: []
+  jokesList: []
 }
 
 const fetchJokesSuccess = createAction('frontmen/jokes/FETCH_JOKES_SUCCESS')
@@ -14,7 +14,7 @@ export const fetchJokes = () => dispatch =>
       dispatch(fetchJokesSuccess(value))
     )
 
-const handleFetchJokesSuccess = (state, jokesList) =>
+const handleFetchJokesSuccess = (state, jokesList = []) =>
   ({
     ...state,
     jokesList

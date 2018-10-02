@@ -1,15 +1,21 @@
 import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom'
+import connect from 'redux-connect-decorator'
 import Wrapper from '../../components/Wrapper'
-import Button from '../../components/Button'
 import Jokes from '../Jokes'
 import Favorites from '../Favorites'
 
 import './App.css'
 
-export default class App extends Component {
 
+@connect(
+  ({ favorite: { favCount } }) => ({ favCount }),
+)
+
+export default class App extends Component {
   render() {
+    const { favCount } = this.props
+
     return (
       <Router>
         <div className='app'>
@@ -18,7 +24,7 @@ export default class App extends Component {
               to='/favorites'
               className='button'
             >
-              My Favorites
+              My Favorites {favCount}
             </NavLink>
             <NavLink 
               to='/jokes'

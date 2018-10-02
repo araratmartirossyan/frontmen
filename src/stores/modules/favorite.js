@@ -2,7 +2,11 @@ import { createAction, createReducer } from 'redux-act'
 import { fetchFavoritesRequest, markFavoriteJokeRequest } from '../../services/favoriteService'
 
 const initialState = {
-  favorites: []
+  favorites: [],
+  meta: {
+    page: 1,
+    limit: 10
+  }
 }
 
 const fetchFavoritesSuccess = createAction('frontmen/favorite/FETCH_FAVORITE_SUCCESS')
@@ -11,17 +15,34 @@ const markFavoriteSuccess = createAction('frontmen/favorite/MARK_FAVORITE_SUCCES
 const markFavoriteFailure = createAction('frontmen/favorite/MARK_FAVORITE_FAILURE')
 
 
-export const fetchFavorites = () => dispatch =>
-  fetchFavoritesRequest()
-  .then(({ data }) =>
-    dispatch(fetchFavoritesSuccess(data))
-  )
+export const fetchFavorites = ({ page, limit }) => dispatch =>
+  fetchFavoritesRequest({ page, limit })
+    .then(({ data }) =>
+      dispatch(fetchFavoritesSuccess({ ...data, page, limit }))
+    )
 
-const handleFetchFavoritesSuccess = (state, { data }) =>
-  ({
-    ...state,
-    favorites: data
-  })
+const handleFetchFavoritesSuccess = (
+  state,
+  {
+    data: {
+      count,
+      favorites = [],
+      pages
+    },
+    page,
+    limit
+  }
+) => ({
+  ...state,
+  favorites,
+  favCount: count,
+  pages,
+  meta: {
+    page,
+    limit
+  }
+})
+  
 
 const handleFetchFavoritesFailure = (state, error) =>
   ({
@@ -30,10 +51,10 @@ const handleFetchFavoritesFailure = (state, error) =>
     error
   })
 
-export const markFavoriteJoke = params => dispatch =>
+export const markFavoriteJoke = params => (dispatch, getState) =>
   markFavoriteJokeRequest(params)
     .then(() => {
-      dispatch(fetchFavorites())
+      dispatch(fetchFavorites({ ...getState().favorite.meta }))
       dispatch(markFavoriteSuccess())
     })
 
