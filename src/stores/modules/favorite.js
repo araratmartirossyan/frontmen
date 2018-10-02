@@ -1,6 +1,10 @@
 import { createAction, createReducer } from 'redux-act'
 import { propOr } from 'ramda'
-import { fetchFavoritesRequest, markFavoriteJokeRequest } from '../../services/favoriteService'
+import {
+  fetchFavoritesRequest,
+  markFavoriteJokeRequest,
+  generateFavorite
+} from '../../services/favoriteService'
 import { setFavoriteJoke } from '../modules/jokes'
 const initialState = {
   favorites: [],
@@ -14,7 +18,8 @@ const fetchFavoritesSuccess = createAction('frontmen/favorite/FETCH_FAVORITE_SUC
 const fetchFavoritesFailure = createAction('frontmen/favorite/FETCH_FAVORITE_FAILURE')
 const markFavoriteSuccess = createAction('frontmen/favorite/MARK_FAVORITE_SUCCESS')
 const markFavoriteFailure = createAction('frontmen/favorite/MARK_FAVORITE_FAILURE')
-
+const generateFavoriteSuccess = createAction('frontmen/favorite/GENERATE_FAVORITE_SUCCESS')
+const generateFavoriteFailure = createAction('frontmen/favorite/GENERATE_FAVORITE_FAILURE')
 
 export const fetchFavorites = ({ page, limit }) => dispatch =>
   fetchFavoritesRequest({ page, limit })
@@ -60,27 +65,42 @@ export const markFavoriteJoke = params => (dispatch, getState) =>
       dispatch(setFavoriteJoke(params))
     })
 
-const handleMarkFavoriteSuccess = (state) =>
-  ({
-    ...state,
-    isLoading: false,
-    isLoaded: true
-  })
+const handleMarkFavoriteSuccess = state => ({ ...state })
  
 const handleMarkFavoriteFailure = (state, error) =>
   ({
     ...state,
     isError: true,
-    isLoading: false,
-    isLoaded: true,
+    error
+  })
+
+export const generateFavoriteJoke = count => (dispatch, getState) =>
+  generateFavorite(count)
+    .then(data => dispatch(generateFavoriteSuccess(data)))
+
+const handleGenerateFavoriteSuccess = (state, data) => {
+  console.log(data, 'important')
+  return ({
+    ...state
+  })
+}
+ 
+const handleGenerateFavoriteFailure = (state, error) =>
+  ({
+    ...state,
+    isError: true,
     error
   })
 
 const reducer = createReducer(on => {
   on(fetchFavoritesFailure, handleFetchFavoritesFailure)
   on(fetchFavoritesSuccess, handleFetchFavoritesSuccess)
+
   on(markFavoriteSuccess, handleMarkFavoriteSuccess)
   on(markFavoriteFailure, handleMarkFavoriteFailure)
+
+  on(generateFavoriteSuccess, handleGenerateFavoriteSuccess)
+  on(generateFavoriteFailure, handleGenerateFavoriteFailure)
 }, initialState)
 
 export default reducer

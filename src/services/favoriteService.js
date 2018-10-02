@@ -12,3 +12,9 @@ export const markFavoriteJokeRequest = params =>
     'http://localhost:3000/api/v1/jokes/',
     params
   )
+
+export const generateFavorite = count =>
+  clientApi(
+    'post',
+    `http://localhost:3000/api/v1/jokes/generateFavorite/?count=${count}`,
+  )

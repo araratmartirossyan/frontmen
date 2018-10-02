@@ -10,8 +10,8 @@ const fetchJokesSuccess = createAction('frontmen/jokes/FETCH_JOKES_SUCCESS')
 const fetchJokesFailure = createAction('frontmen/jokes/FETCH_JOKES_FAILURE')
 export const setFavoriteJoke = createAction('frontmen/jokes/SET_FAVORITE_JOKE')
 
-export const fetchJokes = () => dispatch =>
-  fetchJokesRequest()
+export const fetchJokes = ({ count }) => dispatch =>
+  fetchJokesRequest(count)
     .then(data =>
       dispatch(
         fetchJokesSuccess(

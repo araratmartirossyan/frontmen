@@ -27,7 +27,7 @@ const LOADER_TEXT = 'Chuck sad! Jokes is not loaded!'
 
 export default class Jokes extends Component {
   componentWillMount() {
-    this.props.fetchJokes()
+    this.props.fetchJokes({ count: 10 })
     this.props.fetchFavorites({
       page: 1,
       limit: 10
