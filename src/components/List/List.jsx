@@ -4,12 +4,6 @@ import ListItem from '../ListItem'
 import './List.css'
 
 export default class List extends Component {
-  isFavorite = ({ id, jokeId }) => {
-    const { favorites } = this.props
-    const itemId = jokeId ? jokeId : String(id)
-    return favorites.map(({ jokeId }) => jokeId).includes(itemId)
-  }
-
   render() {
     const { list, action } = this.props
 
@@ -19,7 +13,6 @@ export default class List extends Component {
           <ListItem
             item={item}
             key={key}
-            isFavorite={this.isFavorite(item)}
             title='Joke number'
             action={action}
           />

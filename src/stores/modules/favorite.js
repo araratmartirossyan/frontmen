@@ -1,7 +1,7 @@
 import { createAction, createReducer } from 'redux-act'
 import { propOr } from 'ramda'
 import { fetchFavoritesRequest, markFavoriteJokeRequest } from '../../services/favoriteService'
-
+import { setFavoriteJoke } from '../modules/jokes'
 const initialState = {
   favorites: [],
   meta: {
@@ -57,6 +57,7 @@ export const markFavoriteJoke = params => (dispatch, getState) =>
     .then(() => {
       dispatch(fetchFavorites({ ...getState().favorite.meta }))
       dispatch(markFavoriteSuccess())
+      dispatch(setFavoriteJoke(params))
     })
 
 const handleMarkFavoriteSuccess = (state) =>

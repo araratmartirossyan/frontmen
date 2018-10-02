@@ -24,9 +24,8 @@ export default class List extends Component {
 
   render() {
     const {
-      item: { id, joke, jokeId },
+      item: { id, joke, isFavorite },
       title,
-      isFavorite
     } = this.props
 
     const buttonTitle = isFavorite ? '- Remove from favorite' : '+ Add to favorite'

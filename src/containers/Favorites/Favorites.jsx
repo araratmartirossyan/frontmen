@@ -26,9 +26,15 @@ export default class Favorites extends Component {
     })
   }
 
-  handleLoadMore = () => {
+  handleNextPage = () => {
     const { fetchFavorites, meta: { page, limit } } = this.props
     const currentPage = page + 1
+    fetchFavorites({ page: currentPage, limit })
+  }
+
+  handlePreviousPage = () => {
+    const { fetchFavorites, meta: { page, limit } } = this.props
+    const currentPage = page - 1
     fetchFavorites({ page: currentPage, limit })
   }
 
@@ -40,7 +46,7 @@ export default class Favorites extends Component {
       meta: { page }
     } = this.props
     const hasMore = page < pages
-
+    const showPreviousButton = page > 1
     if (favorites.length === 0) {
       return (<Loader title={LOADER_TITLE} />)
     }
@@ -52,8 +58,8 @@ export default class Favorites extends Component {
           favorites={favorites}
           action={markFavoriteJoke}
         />
-        {!hasMore && <Button title='Previous page' onClick={this.handleLoadMore} />}
-        {hasMore && <Button title='Next page' onClick={this.handleLoadMore} />}
+        {showPreviousButton && <Button title='Previous page' onClick={this.handlePreviousPage} />}
+        {hasMore && <Button title='Next page' onClick={this.handleNextPage} />}
       </div>
     )
   }

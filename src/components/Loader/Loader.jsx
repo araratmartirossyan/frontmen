@@ -14,6 +14,7 @@ export default class Loader extends Component {
         <img
           src={CHUCK_AVATAR}
           className='favorites_avatar'
+          alt='avatar'
         />
       </div>
     )
