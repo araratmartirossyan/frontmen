@@ -21,13 +21,13 @@ export const fetchJokes = () => dispatch =>
     )
 
 const handleSetFavoriteJoke = (state, { jokeId }) => {
-  console.log(jokeId, 'call it')
-  const index = state.jokesList.findIndex(({ id }) => id === jokeId)
+  const { jokesList } = state
+  const index = jokesList.findIndex(({ id }) => id === jokeId)
   const newState = {
     ...state,
-    ...state.jokesList[index] = {
-      ...state.jokesList[index],
-      isFavorite: !state.jokesList[index].isFavorite
+    ...jokesList[index] = {
+      ...jokesList[index],
+      isFavorite: jokesList[index] && !jokesList[index].isFavorite
     }
   }
   return ({
